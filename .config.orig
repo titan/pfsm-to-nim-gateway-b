@@ -1,0 +1,3 @@
+BUILDDIR=/dev/shm/$(NAME-LINK)
+NAME=pfsm-to-nim-gateway
+PREFIX=/usr/local/bin
