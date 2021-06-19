@@ -297,7 +297,7 @@ toNim conf@(MkAppConfig _ mw _) fsm@(MkFsm _ _ _ _ _ _ _ metas)
                                , (indent (indentDelta * 3)) ++ "offset = params.getOrDefault(\"offset\", \"0\")"
                                , (indent (indentDelta * 3)) ++ "limit = params.getOrDefault(\"limit\", \"10\")"
                                , List.join "\n" $ map ((indent (indentDelta * 3)) ++) $ map generateParsingParameter fields
-                               , (indent (indentDelta * 3)) ++ "signbody = @[" ++ (List.join ", " $ sortBy (\a, b => compare a b) $ map (\x => "\"" ++ x ++ "=\" & " ++ (toNimName x)) $ ("limit" :: "offset" :: (map (\(n, _, _) => n) fields))) ++ "].join(\"&\")"
+                               , (indent (indentDelta * 3)) ++ "signbody = @[" ++ (List.join ", " $ map (\x => "\"" ++ x ++ "=\" & " ++ (toNimName x)) $ sortBy (\a, b => compare a b) $ ("limit" :: "offset" :: (map (\(n, _, _) => n) fields))) ++ "].join(\"&\")"
                                , (indent (indentDelta * 2)) ++ "check_" ++ (toNimName defaultMiddleware) ++ "(request, ctx, \"GET|" ++ urlpath ++ "|\" & signbody, \"" ++ name ++ ":get-collection-by-" ++ idxName ++ "\"):"
                                , (indent (indentDelta * 3)) ++ "let"
                                , (indent (indentDelta * 4)) ++ "offint = parseInt(offset)"
@@ -329,7 +329,7 @@ toNim conf@(MkAppConfig _ mw _) fsm@(MkFsm _ _ _ _ _ _ _ metas)
                            , (indent (indentDelta * 3)) ++ "limit = data{\"limit\"}.getInt"
                            , (indent (indentDelta * 3)) ++ "query = data{\"query\"}.getStr"
                            , (indent (indentDelta * 3)) ++ "signbody = @[\"limit=\" & $limit, \"offset=\" & $offset, \"query=\" & query].join(\"&\")"
-                           , (indent (indentDelta * 2)) ++ "check_" ++ (toNimName middleware) ++ "(request, ctx, \"POST|" ++ urlpath ++ "|\" & signbody, \"" ++ name ++ ":search\"):"
+                           , (indent (indentDelta * 2)) ++ "check_" ++ (toNimName middleware) ++ "(request, ctx, \"GET|" ++ urlpath ++ "|\" & signbody, \"" ++ name ++ ":search\"):"
                            , (indent (indentDelta * 3)) ++ "let"
                            , (indent (indentDelta * 4)) ++ "sonic = await openAsync(ctx.metas.getOrDefault(\"sonic-host\"), ctx.metas.getOrDefault(\"sonic-port\").parseInt, ctx.metas.getOrDefault(\"sonic-passwd\"), SonicChannel.Search)"
                            , (indent (indentDelta * 4)) ++ "ids = await sonic.search(query)"
